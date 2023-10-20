@@ -92,35 +92,30 @@ def create_unique_id():
     return f'{current_time.day}{current_time.month}{current_time.year}{hour}{minute}'
 
 
-def get_num_lines_in_file(file_path):
+def get_num_lines_in_file(file_path, enc):
     line_count = 0
 
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding=enc) as file:
         for _ in file:
             line_count += 1
 
     return line_count
 
 
-def get_line_in_message_file_based_on_model(model, file_path):
-    line_count = 0
+def get_line_in_message_file_based_on_model(model, file_path, enc):
     first_letter = model[0]
     headline = '--' + first_letter.upper() + first_letter.lower() + '\n'
 
-    with open(file_path, 'r') as file:
-        for line in file:
-            line_count += 1
-            if line == headline:
-                break
-
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding=enc) as file:
         total_count = 0
+        found_headline = False
+
         for line in file:
             total_count += 1
-            if total_count <= line_count:
-                continue
 
-            if line == '\n':
+            if not found_headline and line == headline:
+                found_headline = True
+            elif found_headline and line == '\n':
                 break
 
     return total_count

@@ -8,10 +8,10 @@ PROPERTIES_EXTENSION = '.properties'
 XML_EXTENSION = '.xml'
 CHANGELOG_MASTER_FILE = f'db.changelog-master{XML_EXTENSION}'
 
-MASTER_DATA_DIR = f'\\src\\main\\java\\com\\iteconomics\\bpa\\masterdata'
-TEST_MASTER_DATA_DIR = f'\\src\\test\\java\\com\\iteconomics\\bpa\\masterdata\\controllers'
-MESSAGES_DIR = f'\\src\\main\\resources'
-DB_CHANGELOG_DIR = f'\\src\\main\\resources\\db\\changelog\\'
+MASTER_DATA_DIR = f'/src/main/java/com/iteconomics/bpa/masterdata'
+TEST_MASTER_DATA_DIR = f'/src/test/java/com/iteconomics/bpa/masterdata/controllers'
+MESSAGES_DIR = f'/src/main/resources'
+DB_CHANGELOG_DIR = f'/src/main/resources/db/changelog'
 
 
 class TargetTypeEnum(str, Enum):
@@ -43,32 +43,32 @@ target_enum_to_dir_mapping = {
 
 
 def create_java_file(target, model):
-    return f'{MASTER_DATA_API_DIR}{MASTER_DATA_DIR}\\{target_enum_to_dir_mapping[target]}\\{model}{target.value}{JAVA_EXTENSION}'
+    return f'{MASTER_DATA_API_DIR}{MASTER_DATA_DIR}/{target_enum_to_dir_mapping[target]}/{model}{target.value}{JAVA_EXTENSION}'
 
 
 def create_test_controller_file(target, model):
-    return f'{MASTER_DATA_API_DIR}{TEST_MASTER_DATA_DIR}\\{model}{target.value}{JAVA_EXTENSION}'
+    return f'{MASTER_DATA_API_DIR}{TEST_MASTER_DATA_DIR}/{model}{target.value}{JAVA_EXTENSION}'
 
 
 def get_file_message_en():
-    return f'{MASTER_DATA_API_DIR}{MESSAGES_DIR}\\messages_en{PROPERTIES_EXTENSION}'
+    return f'{MASTER_DATA_API_DIR}{MESSAGES_DIR}/messages_en{PROPERTIES_EXTENSION}'
 
 
 def get_file_message_de():
-    return f'{MASTER_DATA_API_DIR}{MESSAGES_DIR}\\messages_de{PROPERTIES_EXTENSION}'
+    return f'{MASTER_DATA_API_DIR}{MESSAGES_DIR}/messages_de{PROPERTIES_EXTENSION}'
 
 
 def get_file_db_changeset(model):
     file_changeset = convert_model_to_kebab_case(model)
-    return f'{MASTER_DATA_API_DIR}{DB_CHANGELOG_DIR}\\changeSet-add-{file_changeset}{XML_EXTENSION}'
+    return f'{MASTER_DATA_API_DIR}{DB_CHANGELOG_DIR}/changeSet-add-{file_changeset}{XML_EXTENSION}'
 
 
 def get_file_db_changeset_master():
-    return f'{MASTER_DATA_API_DIR}{DB_CHANGELOG_DIR}\\{CHANGELOG_MASTER_FILE}'
+    return f'{MASTER_DATA_API_DIR}{DB_CHANGELOG_DIR}/{CHANGELOG_MASTER_FILE}'
 
 
 def get_content_db_changeset_master(model):
-    file = get_file_db_changeset(model).split('\\')[-1]
+    file = get_file_db_changeset(model).split('/')[-1]
 
     return f'''\t<include file="db/changelog/{file}"/>\n'''
 
