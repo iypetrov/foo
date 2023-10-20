@@ -23,11 +23,9 @@ The next step is to go to the root directory and build the project. To do so typ
 
 ## OPTIONS
 
-	-generate t s
-			t stands for target, they can be of type:
-				m	master-data-api
+To see all the available options type:
 
-			s is a string input, which is the desired name for the new model
+`$ foo -h`
 
 
 ## EXAMPLES
