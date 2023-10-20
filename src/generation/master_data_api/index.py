@@ -59,18 +59,18 @@ def update_db_changeset(model):
     generate_data(file, get_content_db_changeset(model, unique_id))
 
     file_master = get_file_db_changeset_master()
-    count_lines = get_num_lines_in_file(file_master)
-    insert_at_line(file_master, get_content_db_changeset_master(model), count_lines)
+    count_lines = get_num_lines_in_file(file_master, 'utf-8')
+    insert_at_line(file_master, get_content_db_changeset_master(model), count_lines, 'utf-8')
 
 
 def update_messages(model):
     file_en = get_file_message_en()
-    line_en = get_line_in_message_file_based_on_model(model, file_en)
-    insert_at_line(file_en, get_content_message_en(model), line_en)
+    line_en = get_line_in_message_file_based_on_model(model, file_en, 'utf-8')
+    insert_at_line(file_en, get_content_message_en(model), line_en, 'utf-8')
 
     file_de = get_file_message_de()
-    line_de = get_line_in_message_file_based_on_model(model, file_de)
-    insert_at_line(file_de, get_content_message_de(model), line_de)
+    line_de = get_line_in_message_file_based_on_model(model, file_de, 'iso-8859-1')
+    insert_at_line(file_de, get_content_message_de(model), line_de, 'iso-8859-1')
 
 
 def generate_data(file, data):
@@ -87,28 +87,18 @@ def generate_data(file, data):
         print(f'error generating {file}: {str(ex)}')
 
 
-def insert_at_line(file, data, line):
+def insert_at_line(file, data, line, enc):
     try:
-        with open(file, 'r') as f:
+        with open(file, 'r', encoding=enc) as f:
             lines = f.readlines()
 
-        if not lines:
-            with open(file, 'w') as f:
-                f.write(data)
-            print(f'inserted data into {file} (file was empty)')
-            return
+        if line <= len(lines):
+            lines.insert(line - 1, data)
+        else:
+            lines.append(data)
 
-        if line > len(lines):
-            with open(file, 'a') as f:
-                f.write(data)
-            print(f'appended data to {file} (line number greater than max lines)')
-            return
-
-        lines.insert(line - 1, data)
-
-        with open(file, 'w') as f:
+        with open(file, 'w', encoding=enc) as f:
             f.writelines(lines)
 
-        print(f'inserted data into {file} at line {line}')
     except Exception as ex:
         print(f'error inserting data into {file}: {str(ex)}')

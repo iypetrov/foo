@@ -2,7 +2,8 @@
 
 ## DESCRIPTION
 
-The FOO CLI is a versatile utility designed to streamline various automation tasks associated with a FOO project. It currently supports CRUD template generation for a `master-data-api` component, and additional options will be added in the future to enhance its functionality.
+The FOO CLI is a versatile utility designed to streamline various automation tasks associated with a FOO project. It currently supports:
+- CRUD template generation for a `master-data-api` component in Java & Spring Boot & Hibernate & Liquibase project
 
 
 ## Configuration
@@ -12,28 +13,33 @@ Before using the FOO CLI, you need to set up your environment by creating a .env
 Example .env content:
 ```
 USERNAME=ipetrov
-MASTER_DATA_API_DIR=C:\\Users\\ipetrov\\stuff\\work\\projects\\besudb\\master-data-api
+MASTER_DATA_API_DIR=/mnt/c/Users/ipetrov/stuff/work/projects/besudb/master-data-api
 ```
 
 The next step is to go to the root directory and build the project. To do so type:
+
 `$ pip install .`
 
 
 ## OPTIONS
 
-	generate t s
-			t stands for target, they can be of type:
-				m	master-data-api
+To see all the available options type:
 
-			s is a string input, which is the desired name for the new model
+`$ foo -h`
 
 
 ## EXAMPLES
 
 - To generate a CRUD template for a model named "Product":
-  `$  foo generate m Product`
+
+  `$  foo -generate m Product`
+  
+   or
+
+  `$  foo -g m Product`
 
 ## RUN UNIT TESTS
 
 To run all the unit tests of the FOO CLI itself, go in the root dir and run:
+
 `$  python -m unittest discover -s ./src/tests`
