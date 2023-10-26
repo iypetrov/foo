@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as req_file:
 
 setup(
     name="foo",
-    version="1.1.0",
+    version="1.1.1",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/IliyaYavorovPetrov/foo",

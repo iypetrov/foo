@@ -390,8 +390,8 @@ def get_content_db_changeset(model, unique_id):
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet author="{USERNAME}" id="{unique_id}">
-        <createTable tableName="{table_name}-1">
+    <changeSet author="{USERNAME}" id="{unique_id}-1">
+        <createTable tableName="{table_name}">
             <column autoIncrement="true" name="ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="{table_name}_pkey"/>
             </column>
