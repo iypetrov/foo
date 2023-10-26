@@ -141,7 +141,7 @@ public interface {model}Service {{
 
     {model}DTO get{model}ById(Long id);
 
-    List<{model}DTO> getAll{model}();
+    List<{model}DTO> getAll{model}s();
 
     {model}DTO update{model}({model}DTO {arg}DTO);
 
@@ -184,7 +184,7 @@ public class {model}ServiceImpl extends BaseService implements {model}Service {{
     }}
 
     @Override
-    public List<{model}DTO> getAll{model}() {{
+    public List<{model}DTO> getAll{model}s() {{
         return map({arg}Repository.findAll(), {model}DTO.class);
     }}
 
@@ -227,7 +227,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{endpoint}")
+@RequestMapping("/{endpoint}s")
 @AllArgsConstructor
 public class {model}Controller extends BaseController {{
 
@@ -244,8 +244,8 @@ public class {model}Controller extends BaseController {{
     }}
 
     @SecuredGetMapping
-    public ResponseEntity<List<{model}DTO>> get{model}All() {{
-        return ResponseEntity.ok().body({arg}Service.getAll{model}());
+    public ResponseEntity<List<{model}DTO>> getAll{model}s() {{
+        return ResponseEntity.ok().body({arg}Service.getAll{model}s());
     }}
 
     @SecuredPutMapping
@@ -289,6 +289,7 @@ def get_content_test_controller(model):
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iteconomics.bpa.masterdata.dtos.{model}DTO;
 import com.iteconomics.bpa.masterdata.services.{model}Service;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -302,11 +303,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
 @ExtendWith(MockitoExtension.class)
 class {model}ControllerTest {{
 
     private static final long {const_prefix}_ID = 1L;
-    private static final String {const_prefix}_ENDPOINT = "/{endpoint}";
+    private static final String {const_prefix}_ENDPOINT = "/{endpoint}s";
 
     @Mock
     private {model}Service {arg}Service;
@@ -334,20 +337,32 @@ class {model}ControllerTest {{
     }}
 
     @Test
+    void testGet{model}ById() throws Exception {{
+        Mockito.when({arg}Service.get{model}ById({const_prefix}_ID)).thenReturn({arg}DTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.get({const_prefix}_ENDPOINT + "/{{id}}", {const_prefix}_ID))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }}
+    
+    @Test
+    void testGetAll{model}s() throws Exception {{
+        List<{model}DTO> {arg}DTOs = List.of({arg}DTO);
+
+        Mockito.when({arg}Service.getAll{model}s()).thenReturn({arg}DTOs);
+
+        mockMvc.perform(MockMvcRequestBuilders.get({const_prefix}_ENDPOINT))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(this.{arg}DTO.getId()), Long.class));
+    }}
+
+    @Test
     void testUpdate{model}() throws Exception {{
         Mockito.when({arg}Service.update{model}(Mockito.any({model}DTO.class))).thenReturn({arg}DTO);
 
         mockMvc.perform(MockMvcRequestBuilders.put({const_prefix}_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString({arg}DTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }}
-
-    @Test
-    void testGet{model}ById() throws Exception {{
-        Mockito.when({arg}Service.get{model}ById({const_prefix}_ID)).thenReturn({arg}DTO);
-
-        mockMvc.perform(MockMvcRequestBuilders.get({const_prefix}_ENDPOINT + "/{{id}}", {const_prefix}_ID))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }}
 
@@ -376,7 +391,7 @@ def get_content_db_changeset(model, unique_id):
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet author="{USERNAME}" id="{unique_id}">
-        <createTable tableName="{table_name}">
+        <createTable tableName="{table_name}-1">
             <column autoIncrement="true" name="ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="{table_name}_pkey"/>
             </column>

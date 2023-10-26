@@ -1,7 +1,8 @@
 import unittest
 
-from src.generation.util import is_valid_model, extract_words_from_model, convert_model_to_snake_case, convert_model_to_kebab_case, \
-    convert_word_to_one_starting_with_lower_case
+from src.generation.util import is_valid_model, extract_words_from_model, convert_model_to_snake_case, \
+    convert_model_to_kebab_case, \
+    convert_word_to_one_starting_with_lower_case, convert_model_to_de_sentence
 
 
 class TestIsValidModel(unittest.TestCase):
@@ -79,6 +80,13 @@ class TestConvertWordToOneStartingWithLowerCase(unittest.TestCase):
     def test_multiple_words(self):
         result = convert_word_to_one_starting_with_lower_case('SomeFuckedUpString')
         self.assertEqual(result, 'someFuckedUpString')
+
+
+class TestTranslationToDEFromModel(unittest.TestCase):
+
+    def test_translation(self):
+        result = convert_model_to_de_sentence('WeeklyResponsibility')
+        self.assertNotEqual(result, '')
 
 
 if __name__ == '__main__':
