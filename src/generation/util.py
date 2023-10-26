@@ -1,7 +1,10 @@
 import re
 from datetime import datetime
+from src.config.index import DEEPL_AUTH_KEY
 
-from translate import Translator
+import deepl
+
+translator = deepl.Translator(DEEPL_AUTH_KEY)
 
 
 def is_valid_model(model):
@@ -63,10 +66,7 @@ def convert_model_to_en_sentence(model):
 
 def convert_model_to_de_sentence(model):
     words = convert_model_to_en_sentence(model)
-    result = ''
-    translator = Translator(to_lang="de", from_lang="en")
-    for word in words:
-        result = result + translator.translate(word)
+    result = translator.translate_text(words, target_lang="DE").text
 
     return result
 
