@@ -2,7 +2,7 @@ import unittest
 
 from src.generation.util import is_valid_model, extract_words_from_model, convert_model_to_snake_case, \
     convert_model_to_kebab_case, \
-    convert_word_to_one_starting_with_lower_case, convert_model_to_de_sentence
+    convert_word_to_one_starting_with_lower_case, convert_model_to_de_sentence, send_request_to_postman
 
 
 class TestIsValidModel(unittest.TestCase):
@@ -87,6 +87,13 @@ class TestTranslationToDEFromModel(unittest.TestCase):
     def test_translation(self):
         result = convert_model_to_de_sentence('WeeklyResponsibility')
         self.assertNotEqual(result, '')
+
+
+class TestSendRequestToPostman(unittest.TestCase):
+
+    def test_send_request_to_postman(self):
+        err = send_request_to_postman('foo bar', 'GET', '{{baseURL}}/foo-bar')
+        self.assertEqual(err, None)
 
 
 if __name__ == '__main__':
