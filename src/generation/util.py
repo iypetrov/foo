@@ -1,6 +1,8 @@
 import re
+import json
+import requests
 from datetime import datetime
-from src.config.index import DEEPL_AUTH_KEY
+from src.config.index import DEEPL_AUTH_KEY, POSTMAN_API_KEY, POSTMAN_BPA_COLLECTION_KEY
 
 import deepl
 
@@ -119,3 +121,29 @@ def get_line_in_message_file_based_on_model(model, file_path, enc):
                 break
 
     return total_count
+
+
+def send_request_to_postman(name, request_method, url):
+    request_data = {
+        'collection': POSTMAN_BPA_COLLECTION_KEY,
+        'name': name,
+        'requestMethod': request_method,
+        'url': url,
+    }
+
+    postman_endpoint = 'https://api.getpostman.com/collections/' + POSTMAN_BPA_COLLECTION_KEY + '/requests'
+
+    bearer_token = '{{token}}'
+    headers = {
+        'X-Api-Key': POSTMAN_API_KEY,
+        'Content-Type': 'application/json',
+        # 'Authorization': f'Bearer {bearer_token}'
+    }
+
+    response = requests.post(postman_endpoint, headers=headers, data=json.dumps(request_data))
+    if response.status_code == 201:
+        print(f'request {request_method} {url} was added successfully to Postman')
+        return None
+    else:
+        print("request creation failed with status code:", response.status_code)
+        return response.text
